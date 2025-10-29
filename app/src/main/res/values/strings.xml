@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ReusabelPostFeed</string>
+    <string name="list_feed_full_layout">List Feed Full Layout</string>
+    <string name="grid_feed_layout">Grid Feed Layout</string>
+    <string name="list_feed_compact_layout">List Feed Compact Layout</string>
+    <string name="config_type">configType</string>
+    <string name="listfeed">listFeed</string>
+    <string name="gridfeed">gridFeed</string>
+    <string name="compactlistfeed">compactListFeed</string>
+</resources>
