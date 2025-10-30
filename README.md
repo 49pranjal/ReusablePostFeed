@@ -6,6 +6,12 @@ Designed to be easily embedded across screens with configurable behavior.
 
 ---
 
+## 📸 Screenshots
+![image alt](https://github.com/49pranjal/ReusablePostFeed/blob/master/Screenshot_GridScreenPosts.png) 
+![image alt](https://github.com/49pranjal/ReusablePostFeed/blob/57af5fd3aa4b09a3bd05947509195f30fdd553b2/Screenshot_FullScreenPost.png)
+
+
+
 ## ✨ Features
 
 - Jetpack Compose UI components
@@ -113,3 +119,4 @@ assets/
 ├─ postlist_1.json
 ├─ postlist_2.json
 ├─ postlist_3.json
+
