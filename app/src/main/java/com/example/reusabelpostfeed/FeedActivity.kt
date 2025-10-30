@@ -4,10 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.example.reusabelpostfeed.composableComponents.FeedScreen
+import com.example.reusabelpostfeed.composableComponents.FeedTheme
 import com.example.reusabelpostfeed.data.FeedConfiguration
 import com.example.reusabelpostfeed.data.PostLayout
 import com.example.reusabelpostfeed.viewModels.FeedVMImplementation
@@ -57,11 +62,17 @@ class FeedActivity : ComponentActivity() {
         }
 
         setContent {
-            MaterialTheme {
-                FeedScreen(
-                    config,
-                    feedViewModel
-                )
+            FeedTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    FeedScreen(
+                        config,
+                        feedViewModel
+                    )
+                }
+
             }
         }
     }

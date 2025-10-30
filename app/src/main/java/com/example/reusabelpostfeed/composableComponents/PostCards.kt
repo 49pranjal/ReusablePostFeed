@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -29,6 +30,7 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +45,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
@@ -181,6 +184,8 @@ fun VideoPostCard(
     var showComments by remember { mutableStateOf(false) }
     var visibility by remember { mutableStateOf(0f) }
     var isPlaying by remember { mutableStateOf(false) }
+    //to show buffering
+    var isBuffering by remember { mutableStateOf(true) }
 
     // Release player on dispose
     DisposableEffect(Unit) {
@@ -188,6 +193,18 @@ fun VideoPostCard(
             ExoPlayerManager.pause(exoPlayer)
             exoPlayer.release()
         }
+    }
+
+    // Listen for player state to know when video is ready to render first frame
+    LaunchedEffect(exoPlayer) {
+        exoPlayer.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(state: Int) {
+                when (state) {
+                    Player.STATE_BUFFERING -> isBuffering = true
+                    Player.STATE_READY -> isBuffering = false
+                }
+            }
+        })
     }
 
     Box(
@@ -235,6 +252,21 @@ fun VideoPostCard(
             },
             update = { it.player = exoPlayer }
         )
+
+        //Show placeholder overlay while buffering (instead of black)
+        if (isBuffering) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(MaterialTheme.colors.surface.copy(alpha = 0.8f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colors.primary,
+                    strokeWidth = 3.dp
+                )
+            }
+        }
 
         // For manual play/pause (non-autoplay modes)
         Column(

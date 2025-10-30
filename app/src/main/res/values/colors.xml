@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="md_theme_light_primary">#006A60</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_background">#FAFBFC</color>
+    <color name="md_theme_light_onBackground">#1B1D1E</color>
+    <color name="md_theme_light_surface">#FFFFFF</color>
+    <color name="md_theme_light_surfaceVariant">#E6E9EC</color>
+
 </resources>

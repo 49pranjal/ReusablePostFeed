@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Dark theme colors -->
+   <!-- <color name="md_theme_dark_primary" tools:ignore="MissingDefaultResource">#4CDDC5</color>
+    <color name="md_theme_dark_onPrimary" tools:ignore="MissingDefaultResource">#003731</color>
+    <color name="md_theme_dark_background" tools:ignore="MissingDefaultResource">#191C1B</color>
+    <color name="md_theme_dark_onBackground" tools:ignore="MissingDefaultResource">#E0E3E1</color>-->
+
+    <color name="md_theme_dark_primary" tools:ignore="MissingDefaultResource">#66E0C2</color>
+    <color name="md_theme_dark_onPrimary" tools:ignore="MissingDefaultResource">#003830</color>
+    <color name="md_theme_dark_background" tools:ignore="MissingDefaultResource">#141619</color>
+    <color name="md_theme_dark_onBackground" tools:ignore="MissingDefaultResource">#E0E2E4</color>
+    <color name="md_theme_dark_surface" tools:ignore="MissingDefaultResource">#1C1E22</color>
+    <color name="md_theme_dark_surfaceVariant" tools:ignore="MissingDefaultResource">#2B2F35</color>
+</resources>
