@@ -18,6 +18,9 @@ class FeedVMImplementation @Inject constructor(private val feedUseCase: FeedUseC
     private val _uiState = MutableStateFlow(FeedState(isLoading = true))
 
     override val uiState: StateFlow<FeedState> = _uiState
+    private var currentPage = 1
+    private val pageSize = 6
+    private var isStillLoading = false
 
 
     init {
@@ -28,7 +31,8 @@ class FeedVMImplementation @Inject constructor(private val feedUseCase: FeedUseC
         viewModelScope.launch {
             try {
                 _uiState.value = FeedState(isLoading = true)
-                val postItems = feedUseCase()
+                currentPage = 1
+                val postItems = feedUseCase.pageLoad(currentPage, pageSize)
                 _uiState.value = FeedState(postItems = postItems, isLoading = false)
             } catch (e: Exception) {
                 _uiState.value = FeedState(isLoading = false, errorMessage = e.message)
@@ -36,80 +40,48 @@ class FeedVMImplementation @Inject constructor(private val feedUseCase: FeedUseC
         }
     }
 
-    override fun likePost(id: String) {
-        Log.d("PostLike",id)
-        val current = _uiState.value
-        var newLikedState = false
-        val updatedList = current.postItems.map { post ->
-            if (post.id != id) return@map post
-            else newLikedState = !post.isLikedByUser
-            when (post) {
-                is PostType.TextPost -> {
-                    val newLiked = !post.isLikedByUser
-                    post.copy(
-                        isLikedByUser = newLiked,
-                        likesCount = (post.likesCount + if (newLiked) 1 else -1).coerceAtLeast(0)
-                    )
+
+    override fun loadMore() {
+        if (isStillLoading) return
+        isStillLoading = true
+        viewModelScope.launch {
+            try {
+                val nextPage = currentPage + 1
+                val nextPosts = feedUseCase.pageLoad(nextPage, pageSize)
+                if (nextPosts.isNotEmpty()) {
+                    val merged = _uiState.value.postItems + nextPosts
+                    _uiState.value = _uiState.value.copy(postItems = merged)
+                    currentPage = nextPage
                 }
-                is PostType.ImagePost -> {
-                    val newLiked = !post.isLikedByUser
-                    post.copy(
-                        isLikedByUser = newLiked,
-                        likesCount = (post.likesCount + if (newLiked) 1 else -1).coerceAtLeast(0)
-                    )
-                }
-                is PostType.VideoPost -> {
-                    val newLiked = !post.isLikedByUser
-                    post.copy(
-                        isLikedByUser = newLiked,
-                        likesCount = (post.likesCount + if (newLiked) 1 else -1).coerceAtLeast(0)
-                    )
-                }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(errorMessage = e.message)
+            } finally {
+                isStillLoading = false
             }
         }
-        _uiState.value = current.copy(postItems = updatedList)
-
-        // 2) Fire-and-forget remote call (reconcile on failure if desired)
-        /*viewModelScope.launch {
-            try {
-                likeRemote(id, newLikedState)
-            } catch (e: Exception) {
-                // Optional: revert on failure
-                revertLike(id)
-                _uiState.value = _uiState.value.copy(errorMessage = e.message)
-            }
-        }*/
     }
 
-    private fun revertLike(id: String) {
-        val current = _uiState.value
-        val reverted = current.postItems.map { post ->
-            if (post.id != id) return@map post
-            when (post) {
-                is PostType.TextPost -> {
-                    val newLiked = !post.isLikedByUser
-                    post.copy(
-                        isLikedByUser = newLiked,
-                        likesCount = (post.likesCount + if (newLiked) 1 else -1).coerceAtLeast(0)
-                    )
+    override fun likePost(id: String) {
+        Log.d("PostLike",id)
+        //  Call and update db and update Ui correspondingly (reconcile on failure if desired)
+        viewModelScope.launch {
+            try {
+                val updatedPost = feedUseCase.onLikeClick(id)
+                val current = _uiState.value
+                val updatedList = current.postItems.map { post ->
+                    if (post.id != id) return@map post
+                    when (post) {
+                        is PostType.TextPost -> updatedPost
+                        is PostType.ImagePost -> updatedPost
+                        is PostType.VideoPost -> updatedPost
+                    }
                 }
-                is PostType.ImagePost -> {
-                    val newLiked = !post.isLikedByUser
-                    post.copy(
-                        isLikedByUser = newLiked,
-                        likesCount = (post.likesCount + if (newLiked) 1 else -1).coerceAtLeast(0)
-                    )
-                }
-                is PostType.VideoPost -> {
-                    val newLiked = !post.isLikedByUser
-                    post.copy(
-                        isLikedByUser = newLiked,
-                        likesCount = (post.likesCount + if (newLiked) 1 else -1).coerceAtLeast(0)
-                    )
-                }
+                _uiState.value = current.copy(postItems = updatedList as List<PostType>)
+            } catch (e: Exception) {
+                // Optional: revert on failure
+                _uiState.value = _uiState.value.copy(errorMessage = e.message)
             }
         }
-        _uiState.value = current.copy(postItems = reverted)
     }
 
     override fun commentPost(id: String, comment: String) {
@@ -118,7 +90,7 @@ class FeedVMImplementation @Inject constructor(private val feedUseCase: FeedUseC
         if (comment.isBlank()) return
 
         // 1) Optimistic UI update: increment commentCounts
-        val current = _uiState.value
+        /*val current = _uiState.value
         val updatedList = current.postItems.map { post ->
             if (post.id != id) return@map post
             when (post) {
@@ -127,18 +99,28 @@ class FeedVMImplementation @Inject constructor(private val feedUseCase: FeedUseC
                 is PostType.VideoPost -> post.copy(commentCounts = post.commentCounts + 1, commentList = post.commentList + comment)
             }
         }
-        _uiState.value = current.copy(postItems = updatedList)
+        _uiState.value = current.copy(postItems = updatedList)*/
 
         // 2) Fire-and-forget remote call (reconcile on failure if desired)
-        /*viewModelScope.launch {
+        viewModelScope.launch {
             try {
-                addCommentRemote(id, comment)
+                val updatedPost = feedUseCase.onComment(id, comment)
+                val current = _uiState.value
+                val updatedList = current.postItems.map { post ->
+                    if (post.id != id) return@map post
+                    when (post) {
+                        is PostType.TextPost -> updatedPost
+                        is PostType.ImagePost -> updatedPost
+                        is PostType.VideoPost -> updatedPost
+                    }
+                }
+                _uiState.value = current.copy(postItems = updatedList as List<PostType>)
             } catch (e: Exception) {
                 // Optional: revert on failure
-                revertCommentIncrement(id)
+                //revertCommentIncrement(id)
                 _uiState.value = _uiState.value.copy(errorMessage = e.message)
             }
-        }*/
+        }
     }
 
     private fun revertCommentIncrement(id: String) {
@@ -168,10 +150,6 @@ class FeedVMImplementation @Inject constructor(private val feedUseCase: FeedUseC
 
     override fun refresh() {
         loadInitialFeed()
-    }
-
-    override fun loadMore() {
-        TODO("Not yet implemented")
     }
 
     override fun retryOnFailure() {

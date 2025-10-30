@@ -1,0 +1,73 @@
+[
+  {
+    "type": "video",
+    "id": "v3",
+    "text": "Tears of Steel scene.",
+    "creatorName": "Pia",
+    "createdTime": 1698591000000,
+    "likesCount": 156,
+    "commentCounts": 21,
+    "isLikedByUser": false,
+    "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+    "thumbnailUrl": null,
+    "commentList": ["Trial", "Error", "Video"]
+  },
+  {
+    "type": "image",
+    "id": "i5",
+    "text": "City lights at night.",
+    "creatorName": "Ken",
+    "createdTime": 1698584400000,
+    "likesCount": 87,
+    "commentCounts": 10,
+    "isLikedByUser": false,
+    "imageUrl": "https://picsum.photos/id/1025/960/640",
+    "thumbnailUrl": null
+  },
+  {
+    "type": "text",
+    "id": "t2",
+    "text": "Kotlin tip: prefer data classes for immutable models.",
+    "creatorName": "Bob",
+    "createdTime": 1698592800000,
+    "likesCount": 45,
+    "commentCounts": 9,
+    "isLikedByUser": true,
+    "commentList": ["Trial", "Error"]
+  },
+  {
+    "type": "video",
+    "id": "v4",
+    "text": "Elephants Dream clip.",
+    "creatorName": "Quinn",
+    "createdTime": 1698588000000,
+    "likesCount": 132,
+    "commentCounts": 18,
+    "isLikedByUser": true,
+    "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    "thumbnailUrl": null
+  },
+  {
+    "type": "image",
+    "id": "i7",
+    "text": "Coffee and code.",
+    "creatorName": "Max",
+    "createdTime": 1698577200000,
+    "likesCount": 111,
+    "commentCounts": 15,
+    "isLikedByUser": true,
+    "imageUrl": "https://picsum.photos/900/600?blur=2",
+    "thumbnailUrl": null,
+    "commentList": ["Trial", "Error", "Image"]
+  },
+  {
+    "type": "text",
+    "id": "t5",
+    "text": "REST API integration wrapped with repository pattern for clean boundaries.",
+    "creatorName": "Evan",
+    "createdTime": 1698564000000,
+    "likesCount": 31,
+    "commentCounts": 6,
+    "isLikedByUser": false
+  }
+]

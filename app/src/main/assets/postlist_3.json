@@ -1,0 +1,71 @@
+[
+  {
+    "type": "video",
+    "id": "v5",
+    "text": "Subaru Outback on street and dirt.",
+    "creatorName": "Ria",
+    "createdTime": 1698585600000,
+    "likesCount": 77,
+    "commentCounts": 9,
+    "isLikedByUser": false,
+    "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+    "thumbnailUrl": null
+  },
+  {
+    "type": "image",
+    "id": "i1",
+    "text": "Sunset vibes.",
+    "creatorName": "Greg",
+    "createdTime": 1698598200000,
+    "likesCount": 120,
+    "commentCounts": 18,
+    "isLikedByUser": true,
+    "imageUrl": "https://picsum.photos/id/10/800/600",
+    "thumbnailUrl": null,
+    "commentList": ["Trial", "Error"]
+  },
+  {
+    "type": "text",
+    "id": "t3",
+    "text": "Today’s standup went great. Shipping a new feature soon!",
+    "creatorName": "Charlie",
+    "createdTime": 1698589200000,
+    "likesCount": 23,
+    "commentCounts": 2,
+    "isLikedByUser": false
+  },
+  {
+    "type": "video",
+    "id": "v6",
+    "text": "For Bigger Joyrides.",
+    "creatorName": "Sam",
+    "createdTime": 1698582000000,
+    "likesCount": 84,
+    "commentCounts": 12,
+    "isLikedByUser": false,
+    "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+    "thumbnailUrl": null
+  },
+  {
+    "type": "image",
+    "id": "i3",
+    "text": "Minimal workspace setup.",
+    "creatorName": "Ivan",
+    "createdTime": 1698591900000,
+    "likesCount": 64,
+    "commentCounts": 5,
+    "isLikedByUser": false,
+    "imageUrl": "https://picsum.photos/id/77/1080/720",
+    "thumbnailUrl": null
+  },
+  {
+    "type": "text",
+    "id": "t1",
+    "text": "Hello world! First post from the feed.",
+    "creatorName": "Alice",
+    "createdTime": 1698594600000,
+    "likesCount": 12,
+    "commentCounts": 3,
+    "isLikedByUser": false
+  }
+]

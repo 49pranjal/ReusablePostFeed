@@ -40,16 +40,6 @@ class MainActivity : AppCompatActivity() {
         binding.btnCompactFeed.setOnClickListener {
             openFeedActivity(getString(R.string.compactlistfeed))
         }
-        /*setContent {
-            ReusabelPostFeedTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }*/
     }
 
     private fun openFeedActivity(configType: String) {
@@ -58,19 +48,4 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
-/*
-@Composable
-fun Greeting(name: String, modifier: Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true, name = "Test", showSystemUi = true)
-@Composable
-fun GreetingPreview() {
-    ReusabelPostFeedTheme {
-        Greeting("Android", modifier = Modifier.fillMaxSize())
-    }
-}*/

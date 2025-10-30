@@ -1,0 +1,75 @@
+[
+  {
+    "type": "video",
+    "id": "v1",
+    "text": "Big Buck Bunny sample.",
+    "creatorName": "Nina",
+    "createdTime": 1698591000000,
+    "likesCount": 220,
+    "commentCounts": 40,
+    "isLikedByUser": true,
+    "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "thumbnailUrl": null,
+    "commentList": ["Trial", "Error"]
+  },
+  {
+    "type": "image",
+    "id": "i6",
+    "text": "Calm lake reflections.",
+    "creatorName": "Lia",
+    "createdTime": 1698580800000,
+    "likesCount": 76,
+    "commentCounts": 8,
+    "isLikedByUser": false,
+    "imageUrl": "https://picsum.photos/1200/800?grayscale",
+    "thumbnailUrl": null,
+    "commentList": ["Trial", "Error"]
+  },
+  {
+    "type": "text",
+    "id": "t4",
+    "text": "Using sealed classes to model UI states keeps things safe and readable.",
+    "creatorName": "Diana",
+    "createdTime": 1698573600000,
+    "likesCount": 67,
+    "commentCounts": 14,
+    "isLikedByUser": true,
+    "commentList": ["Trial", "Error", "text"]
+  },
+  {
+    "type": "video",
+    "id": "v2",
+    "text": "Sintel short film.",
+    "creatorName": "Omar",
+    "createdTime": 1698596400000,
+    "likesCount": 180,
+    "commentCounts": 27,
+    "isLikedByUser": false,
+    "videoUrl": "https://storage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    "thumbnailUrl": null,
+    "commentList": ["Trial", "Error", "Video"]
+  },
+  {
+    "type": "image",
+    "id": "i2",
+    "text": "Street photography shot.",
+    "creatorName": "Hana",
+    "createdTime": 1698595500000,
+    "likesCount": 98,
+    "commentCounts": 7,
+    "isLikedByUser": false,
+    "imageUrl": "https://picsum.photos/id/33/900/600",
+    "thumbnailUrl": null,
+    "commentList": ["Trial", "Error"]
+  },
+  {
+    "type": "text",
+    "id": "t6",
+    "text": "Caching + pagination boosted scroll performance significantly.",
+    "creatorName": "Fiona",
+    "createdTime": 1698545400000,
+    "likesCount": 54,
+    "commentCounts": 11,
+    "isLikedByUser": true
+  }
+]

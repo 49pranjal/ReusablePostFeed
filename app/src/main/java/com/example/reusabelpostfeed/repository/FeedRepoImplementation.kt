@@ -1,35 +1,41 @@
 package com.example.reusabelpostfeed.repository
 
+import android.content.Context
 import com.example.reusabelpostfeed.data.PostType
+import com.example.reusabelpostfeed.dataSource.DataSource
+import com.example.reusabelpostfeed.roomdb.Converter
+import com.example.reusabelpostfeed.roomdb.PostDao
+import com.example.reusabelpostfeed.utils.toDomain
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class FeedRepoImplementation @Inject constructor(): FeedRepo {
-    override suspend fun getListOfPosts(): List<PostType> {
+class FeedRepoImplementation @Inject constructor(
+    private val dao: PostDao,
+    private val assets: DataSource,
+    @ApplicationContext private val context: Context
+): FeedRepo {
+
+    private suspend fun checkAndLoadDataFromAssetsIntoDb(pageNo: Int, pageSize: Int) {
+        // If DB already has enough rows for requested page, skip import
+        val needed = pageNo * pageSize
+        val total = dao.count()
+        if (total >= needed) return
+
+        // Import missing pages up to 'page'
+        for (p in (total / pageSize + 1)..pageNo) {
+            val items = assets.readPage(context, p)
+            if (items.isNotEmpty()) {
+                dao.upsertAll(items)
+            }
+        }
+    }
+
+    override suspend fun getListOfPosts(pageNo: Int, pageSize: Int): List<PostType> {
+        checkAndLoadDataFromAssetsIntoDb(pageNo, pageSize)
+        val offset = (pageNo - 1) * pageSize
+        return dao.getPage(limit = pageSize, offset = offset).map { it.toDomain() }
+
         /*return listOf(
-            PostType.TextPost("1", "Hello world!", "Alice", System.currentTimeMillis()),
-            PostType.ImagePost("2", "Check this out!", imageUrl = "https://picsum.photos/400", creatorName = "Bob", createdTime = System.currentTimeMillis()),
-            PostType.VideoPost("3", "Watch this video", videoUrl = "https://example.com/video.mp4", creatorName =  "Charlie", createdTime =  System.currentTimeMillis()),
-            PostType.TextPost("4", "Hello world!", "Alice", System.currentTimeMillis()),
-            PostType.ImagePost("5", "Check this out!", imageUrl = "https://picsum.photos/400", creatorName = "Bob", createdTime = System.currentTimeMillis()),
-            PostType.VideoPost("6", "Watch this video", videoUrl = "https://example.com/video.mp4", creatorName =  "Charlie", createdTime =  System.currentTimeMillis()),
-            PostType.TextPost("7", "Hello world!", "Alice", System.currentTimeMillis()),
-            PostType.ImagePost("8", "Check this out!", imageUrl = "https://picsum.photos/400", creatorName = "Bob", createdTime = System.currentTimeMillis()),
-            PostType.VideoPost("9", "Watch this video", videoUrl = "https://example.com/video.mp4", creatorName =  "Charlie", createdTime =  System.currentTimeMillis()),
-            PostType.TextPost("10", "Hello world!", "Alice", System.currentTimeMillis()),
-            PostType.ImagePost("11", "Check this out!", imageUrl = "https://picsum.photos/400", creatorName = "Bob", createdTime = System.currentTimeMillis()),
-            PostType.VideoPost("12", "Watch this video", videoUrl = "https://example.com/video.mp4", creatorName =  "Charlie", createdTime =  System.currentTimeMillis()),
-            PostType.TextPost("13", "Hello world!", "Alice", System.currentTimeMillis()),
-            PostType.ImagePost("14", "Check this out!", imageUrl = "https://picsum.photos/400", creatorName = "Bob", createdTime = System.currentTimeMillis()),
-            PostType.VideoPost("15", "Watch this video", videoUrl = "https://example.com/video.mp4", creatorName =  "Charlie", createdTime =  System.currentTimeMillis()),
-            PostType.TextPost("16", "Hello world!", "Alice", System.currentTimeMillis()),
-            PostType.ImagePost("17", "Check this out!", imageUrl = "https://picsum.photos/400", creatorName = "Bob", createdTime = System.currentTimeMillis()),
-            PostType.VideoPost("18", "Watch this video", videoUrl = "https://example.com/video.mp4", creatorName =  "Charlie", createdTime =  System.currentTimeMillis())
-
-
-
-        )*/
-
-        return listOf(
             PostType.VideoPost(
                 id = "v1",
                 text = "Big Buck Bunny sample.",
@@ -233,14 +239,23 @@ class FeedRepoImplementation @Inject constructor(): FeedRepo {
                 commentCounts = 22,
                 isLikedByUser = true
             )
-        )
+        )*/
     }
 
-    override suspend fun likedPost(id: String) {
-        TODO("Not yet implemented")
+    override suspend fun likedPost(id: String): PostType? {
+        val entity = dao.getById(id) ?: return null
+        val like = !entity.isLikedByUser
+        val newLikes = (entity.likesCount + if (like) 1 else -1).coerceAtLeast(0)
+        dao.updateLike(id, like, newLikes)
+        return dao.getById(id)?.toDomain()
     }
 
-    override suspend fun commentedPost(id: String, comment: String) {
-        TODO("Not yet implemented")
+    override suspend fun commentedPost(id: String, comment: String): PostType? {
+        val entity = dao.getById(id) ?: return null
+        val conv = Converter()
+        val list = conv.toList(entity.commentListJson)
+        val newList = list + comment
+        dao.updateComments(id, entity.commentCounts + 1, conv.fromList(newList))
+        return dao.getById(id)?.toDomain()
     }
 }
