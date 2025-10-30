@@ -16,6 +16,7 @@ Designed to be easily embedded across screens with configurable behavior.
 - Post types: Text, Image, Video
 - Like and Comment interactions persisted locally
 - Configurable, embeddable feed (List or Grid)
+- Dark Mode Support with Theming, Pagination Supported, AutoPlay Play/Pause Videos when >/<50% of it is visible
 
 ---
 
